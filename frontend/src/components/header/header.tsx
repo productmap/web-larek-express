@@ -8,6 +8,7 @@ import { resetBasket, selectBasketTotalCount } from '@slices/basketSlice';
 import styles from './header.module.scss';
 import { useErrorHandler } from '@utils/hooks/useErrorHandler.ts';
 import { toast } from 'react-toastify';
+import { ServerError } from '@types';
 
 export default function Header() {
   const location = useLocation();
@@ -16,20 +17,27 @@ export default function Header() {
   const basketItemsCount = useAppSelector(selectBasketTotalCount);
   const user = useAppSelector(getUser);
   const [logoutUser] = useLogoutUserMutation();
-  const errorHandler = useErrorHandler("Ошибка авторизации");
+  const errorHandler = useErrorHandler("Ошибка при выходе из аккаунта");
 
   const handleLogout = async () => {
     if (!user) return;
 
-    return logoutUser().unwrap().then(() => {
-      dispatch(setUser(null));
-      dispatch(resetBasket());
-      toast.info("Вы вышли из аккаунта");
-      navigate('/');
-    }).catch((error: unknown) => {
+    try {
+      const response: ServerError  = await logoutUser().unwrap();
+
+      if (response.success) {
+        dispatch(setUser(null));
+        dispatch(resetBasket());
+        toast.success("Вы успешно вышли из аккаунта");
+        navigate('/');
+      } else {
+        errorHandler(response.message);
+      }
+    } catch (error: unknown) {
       errorHandler(error);
-    });
+    }
   };
+
 
   return (
     <header className={styles.header}>

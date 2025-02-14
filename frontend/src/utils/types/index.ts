@@ -69,6 +69,11 @@ export type UserRegisterBodyDto = {
   password: string;
 } & IUser;
 
+export type ServerError = {
+  success: boolean;
+  message?: string;
+}
+
 export type OrderForm = Omit<IOrder, 'total' | 'items'>;
 
 export interface IOrderResult {
