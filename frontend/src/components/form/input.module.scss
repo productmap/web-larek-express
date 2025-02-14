@@ -1,8 +1,12 @@
+@use '@styles/mixins' as mixins;
+@use '@styles/variables' as *;
+
 .form {
   &__field {
     @include mixins.flex(column);
     gap: 1.5em;
   }
+
   &__label {
     flex-grow: 1;
   }
@@ -14,7 +18,6 @@
   &__input {
     background: transparent;
     color: white;
-    border: $defaultBorder;
     border-color: $secondary;
     border-radius: 1.5rem;
     padding: 20px 50px;
@@ -30,14 +33,13 @@
       color: $hover;
     }
 
-    &[type=number]::-webkit-inner-spin-button {
+    &[type='number']::-webkit-inner-spin-button {
       appearance: none;
       -webkit-appearance: none;
     }
-
-    
   }
 }
+
 textarea.form__input {
   resize: none;
   min-height: 225px;

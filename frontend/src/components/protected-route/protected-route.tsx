@@ -1,50 +1,39 @@
 import type { ReactNode } from 'react';
-import type { Location } from 'react-router-dom';
-
-import Spinner from '@components/spinner';
-import { userSelectors } from '@slices/user';
-import { useSelector } from '@store/hooks';
 import { Navigate, useLocation } from 'react-router-dom';
+import { useAppSelector } from '@store';
+import { getIsAuthChecked } from '@slices/userSlice.ts';
+import { useGetUserQuery } from '@api';
+import Spinner from '@components/spinner';
 
 type TProtectedRouteProps = {
-	children: ReactNode;
-	onlyUnAuth?: boolean;
+  children: ReactNode;
+  redirectPath?: string;
+  onlyUnAuth?: boolean;
 };
 
-type BackgroundState = {
-	background?: Location;
-};
+export default function ProtectedRoute({
+  children,
+  redirectPath = '/login',
+  onlyUnAuth = false,
+}: TProtectedRouteProps) {
+  const location = useLocation();
+  const isAuthChecked = useAppSelector(getIsAuthChecked);
+  const { isFetching } = useGetUserQuery(undefined, { skip: isAuthChecked });
 
+  if (isFetching) {
+    return <Spinner />;
+  }
 
-type FromState = {
-	from?: Location & BackgroundState;
-	background?: Location;
-};
+  // Авторизованный пользователь на маршруте для неавторизованных пользователей
+  if (onlyUnAuth && isAuthChecked) {
+    return <Navigate to={redirectPath} replace
+                     state={{ background: location.state?.from?.background }} />;
+  }
 
-export default function ProtectedRoute({ children, onlyUnAuth }: TProtectedRouteProps) {
-	const location: Location<FromState> = useLocation() as Location<FromState>;
-	const {getIsAuthChecked, getUser} = userSelectors;
-	const user = useSelector(getUser);
-	const isAuthChecked = useSelector(getIsAuthChecked);
+  // Неавторизованный пользователь на защищенном маршруте
+  if (!onlyUnAuth && !isAuthChecked) {
+    return <Navigate to={redirectPath} state={{ from: location }} />;
+  }
 
-	if (!isAuthChecked) {
-		console.log('WAIT USER CHECKOUT');
-		return <Spinner />;
-	}
-
-	// Редирект на целевой компонент
-	if (onlyUnAuth && user) {
-		console.log('NAVIGATE FROM LOGIN TO INDEX/FROM');
-		const from = location.state?.from || { pathname: '/' };
-		const background = location.state?.from?.background || null;
-		return <Navigate replace to={from} state={{background}}/>;
-	}
-
-	// Редирект на страницу логина при отсутствии пользователя в сторе
-	if (!onlyUnAuth && !user) {
-		console.log('NAVIGATE FROM PAGE TO LOGIN', location);		
-		return <Navigate replace to={'/login'} state={{ from: {...location, background: location.state?.background}}} />;
-	}
-
-	return children; // все хорошо и рендерим компонент
+  return children;
 }

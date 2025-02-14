@@ -1,71 +1,100 @@
 import { CATEGORY_CLASSES } from '@constants';
-import { PaymentType } from '../../components/order/helpers/types';
 
 export interface IProduct {
-    _id: string;
-    title: string;
-    price: number | null;
-    description: string;
-    category: keyof typeof CATEGORY_CLASSES;
-    image: IFile;
+  _id: string;
+  title: string;
+  price: number | null;
+  description: string;
+  category: keyof typeof CATEGORY_CLASSES;
+  image: {
+    fileName: string;
+    alt: string;
+  };
 }
 
 export interface IFile {
-    fileName: string
-    originalName: string;
+  _id: string;
+  fileName: string;
+  originalName: string;
+  alt?: string;
 }
 
 export interface IBasket {
-    items: IProduct[];
-    totalCount: number;
+  items: IProduct[];
+  totalCount: number;
+}
+
+export interface IOrderItem {
+  product: string;
+}
+
+export enum PaymentType {
+  Card = 'card',
+  Online = 'online'
 }
 
 export interface IOrder {
-    payment: PaymentType;
-    email: string;
-    phone: string;
-    address: string;
-    total: number;
-    items: string[];
+  payment: PaymentType;
+  email: string;
+  phone: string;
+  address: string;
+  items: string[];
+  totalPrice: number;
 }
 
+export interface IOrderResult {
+  id: string;
+  total: number;
+}
 
 export interface IUser {
-	email: string;
-	name: string;
+  email: string;
+  name: string;
 }
 
 export type ServerResponse<T> = {
-	success: boolean;
+  success: boolean;
 } & T;
 
-export type UserResponseToken = ServerResponse<{
-	user: IUser;
-	accessToken: string;
-	refreshToken: string;
-}>;
-
 export type UserResponse = ServerResponse<{
-	user: IUser;
-}>;
-
-export type RefreshResponse = ServerResponse<{
-	accessToken: string;
-	refreshToken: string;
+  user: IUser;
 }>;
 
 export type UserLoginBodyDto = {
-	email: string;
-	password: string;
+  email: string;
+  password: string;
 };
 
 export type UserRegisterBodyDto = {
-	password: string;
+  password: string;
 } & IUser;
 
-export type OrderForm = Omit<IOrder, 'total'|'items'>;
+export type OrderForm = Omit<IOrder, 'total' | 'items'>;
 
 export interface IOrderResult {
-    id: string;
-    total: number;
+  id: string;
+  total: number;
 }
+
+export interface PaymentFormValues {
+  address: string;
+  payment: PaymentType;
+}
+
+export interface ContactsFormValues {
+  email: string;
+  phone: string;
+}
+
+
+export const enum RequestStatus {
+  Idle = 'idle',
+  Loading = 'loading',
+  Success = 'success',
+  Failed = 'failed'
+}
+
+export type ApiListResponse<Type> = {
+  total: number;
+  items: Type[];
+};

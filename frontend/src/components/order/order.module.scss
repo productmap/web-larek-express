@@ -1,64 +1,69 @@
+@use '@styles/mixins' as mixins;
+@use '@styles/variables' as *;
+
 .order {
-	@include mixins.flex(column);
-	gap: 4rem;
-	margin-bottom: 4rem;
+  @include mixins.flex(column);
+  gap: 4rem;
+  margin-bottom: 4rem;
 
-	&__field {
-		@include mixins.flex(column);
-		gap: 1.5rem;
-	}
+  &__field {
+    @include mixins.flex(column);
+    gap: 1.5rem;
+  }
 
-	&__buttons {
-		@include mixins.flex(row);
-		gap: 1.5rem;
-	}
+  &__buttons {
+    @include mixins.flex(row);
+    gap: 1.5rem;
+  }
 
-	&__button {
-		&_alt {
-			@include mixins.button(white, $primaryLight, $primaryLight);
-			border: $defaultBorder;
-			&:hover {
-				border: $hoverBorder;
-			}
-		}
+  &__button {
+    &_alt {
+      @include mixins.button(white, $primaryLight, $primaryLight);
+      border: $defaultBorder;
 
-		&_alt_active {
-			@include mixins.button(white, $secondaryLight, $secondaryLight);
-			border: $hoverBorder;
-		}
+      &:hover {
+        border: $hoverBorder;
+      }
+    }
 
-		&_secondary {
-			@include mixins.button(white, $secondaryLight, $secondaryLight);
-			opacity: 0.6;
-			border: $defaultBorder;
-			&:hover {
-				border: $hoverBorder;
-				opacity: 1;
-			}
-		}
-	}
+    &_alt_active {
+      @include mixins.button(white, $secondaryLight, $secondaryLight);
+      border: $hoverBorder;
+    }
 
-	&__success {
-		@include mixins.flex(column);
-		justify-content: center;
-		align-items: center;
-		text-align: center;
-		gap: 1rem;
+    &_secondary {
+      @include mixins.button(white, $secondaryLight, $secondaryLight);
+      opacity: 0.6;
+      border: $defaultBorder;
 
-		&::before {
-			content: ' ';
-			@include mixins.background('../../assets/success.png');
-			width: 256px;
-			height: 256px;
-		}
-	}
+      &:hover {
+        border: $hoverBorder;
+        opacity: 1;
+      }
+    }
+  }
 
+  &__success {
+    @include mixins.flex(column);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+
+    &::before {
+      content: ' ';
+      @include mixins.background('../../assets/success.png');
+      width: 256px;
+      height: 256px;
+    }
+  }
 
   &__title {
     font-size: $titleFontSize;
     margin-bottom: 0;
   }
-	&__close {
-		margin-top: 2rem;
-	}
+
+  &__close {
+    margin-top: 2rem;
+  }
 }

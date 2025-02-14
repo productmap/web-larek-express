@@ -1,49 +1,79 @@
+@use '@styles/mixins' as mixins;
+@use '@styles/variables' as *;
+
 .admin {
-	&__container {
-		@include mixins.container(45px,45px);
-	}
-	&__products {
-		@include mixins.flex(column);
-	}
-	&__title {
-		font-size: $titleFontSize;
-	}
+  &__container {
+    @include mixins.container(45px, 45px);
+  }
 
-	&__header {
-		@include mixins.flex(row);
-		align-items: center;
-		justify-content: space-between;
-	}
+  &__products {
+    @include mixins.flex(column);
+  }
 
-	&__button {
-		align-self: flex-start;
+  &__title {
+    font-size: $titleFontSize;
+  }
 
-		&_alt {
-			@include mixins.button(white, $primaryLight, $primaryLight);
-			border: $defaultBorder;
-			margin-left: auto;
-			&:hover {
-				border: $hoverBorder;
-			}
-		}
-	}
-	
-	&__buttons {
-		@include mixins.flex(row);
-	}
+  &__header {
+    @include mixins.flex(row);
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
 
+  &__button {
+    align-self: flex-start;
 
-	&__file {	
-		@include mixins.button(white, $primaryLight, $primaryLight);
-		border: $defaultBorder;
-		&:hover {
-			border: $hoverBorder;
-		}
-	}
+    &_alt {
+      @include mixins.button(white, $primaryLight, $primaryLight);
+      border: $defaultBorder;
+      margin-left: auto;
+
+      &:hover {
+        border: $hoverBorder;
+      }
+    }
+  }
+
+  &__buttons {
+    @include mixins.flex(row);
+  }
+
+  &__file {
+    @include mixins.button(white, $primaryLight, $primaryLight);
+    border: $defaultBorder;
+
+    &:hover {
+      border: $hoverBorder;
+    }
+
+    + .admin__preview { // Стили для .admin__preview, если он идет сразу после .admin__file
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      padding: 5px;
+      border-radius: 4px;
+      display: inline-block; // Чтобы располагался рядом с FileInput, если нужно
+      vertical-align: top; // Выравнивание по верху
+      margin-left: 10px; // Отступ слева от FileInput
+    }
+  }
+
+  .admin__preview {
+    // Альтернативные стили, если не используете adjacent sibling selector
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 4px;
+    display: block; // Или inline-block, в зависимости от желаемого расположения
+    img {
+      display: block; // Убрать лишний отступ у img
+      max-width: 100px;
+      max-height: 100px;
+    }
+  }
 }
 
-
 .label__price {
-	align-self: flex-start;
-	width: 50%;
+  align-self: flex-start;
+  width: 50%;
 }
