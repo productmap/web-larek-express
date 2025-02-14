@@ -1,28 +1,34 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AppRoute } from '@constants';
 import clsx from 'clsx';
-import { useAppSelector } from '@store';
+import { useAppDispatch, useAppSelector } from '@store';
 import { useLogoutUserMutation } from '@api';
-import { getUser } from '@slices/userSlice.ts';
-import { selectBasketTotalCount } from '@slices/basketSlice.ts';
+import { getUser, setUser } from '@slices/userSlice';
+import { resetBasket, selectBasketTotalCount } from '@slices/basketSlice';
 import styles from './header.module.scss';
+import { useErrorHandler } from '@utils/hooks/useErrorHandler.ts';
+import { toast } from 'react-toastify';
 
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const basketItemsCount = useAppSelector(selectBasketTotalCount);
   const user = useAppSelector(getUser);
   const [logoutUser] = useLogoutUserMutation();
+  const errorHandler = useErrorHandler("Ошибка авторизации");
 
   const handleLogout = async () => {
-      if (user) {
-        try {
-          await logoutUser();
-          navigate('/');
-        } catch (error) {
-          console.error('Logout failed:', error);
-        }
-      }
+    if (!user) return;
+
+    return logoutUser().unwrap().then(() => {
+      dispatch(setUser(null));
+      dispatch(resetBasket());
+      toast.info("Вы вышли из аккаунта");
+      navigate('/');
+    }).catch((error: unknown) => {
+      errorHandler(error);
+    });
   };
 
   return (
@@ -31,8 +37,8 @@ export default function Header() {
         <Link className={styles.header__logo} to={AppRoute.Main}>
           <img
             className={styles['header__logo-image']}
-            src="/logo.svg"
-            alt="Film! logo"
+            src='/logo.svg'
+            alt='Film! logo'
           />
         </Link>
         {!user && (
@@ -47,7 +53,7 @@ export default function Header() {
               Админка
             </Link>
             <a
-              href="#"
+              href='#'
               onClick={handleLogout}
               className={clsx(styles.header__icon, styles.header__logout)}
             >
@@ -61,8 +67,8 @@ export default function Header() {
             background: {
               ...location,
               pathname: AppRoute.Main,
-              state: null,
-            },
+              state: null
+            }
           }}
           className={clsx(styles.header__icon, styles.header__basket)}
         >
