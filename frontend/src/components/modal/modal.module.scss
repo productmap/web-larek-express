@@ -1,3 +1,6 @@
+@use '@styles/mixins' as mixins;
+@use '@styles/variables' as *;
+
 .modal {
   @include mixins.sublayer;
   height: max-content;
@@ -6,12 +9,13 @@
   z-index: 100;
   padding-top: 5vh;
   padding-bottom: 5vh;
+
   &_active {
     display: flex;
   }
 
   &::before {
-    content: "";
+    content: '';
     position: fixed;
     top: 0;
     left: 0;
@@ -35,10 +39,9 @@
   }
 
   &__title {
-    margin: 0;
     font-size: 1.5rem;
     font-weight: 400;
-    margin-bottom: 30px;
+    margin: 0 0 30px;
   }
 
   &__actions {
@@ -62,7 +65,7 @@
   }
 
   &__message {
-    white-space:nowrap;
+    white-space: nowrap;
     max-width: 60%;
     text-overflow: ellipsis;
     overflow: hidden;

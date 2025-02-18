@@ -3,32 +3,37 @@
     "es2021": true,
     "node": true
   },
-  "extends": ["airbnb-base"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": [
+    "@typescript-eslint",
+    "node"
+  ],
   "settings": {
     "import/resolver": {
       "node": {
         "extensions": [".ts", ".js", ".json"]
       }
     },
-    "import/extensions": [".js", ".ts"]
+    "import/extensions": [
+      ".js",
+      ".ts"
+    ],
+    "node": {
+      "tryExtensions": [
+        ".js",
+        ".json",
+        ".node"
+      ]
+    }
   },
   "rules": {
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": "warn",
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "js": "never",
-        "ts": "never"
-      }
-    ],
+    "import/extensions": "off",
     "no-underscore-dangle": [
       "error",
       {
@@ -44,6 +49,10 @@
         "varsIgnorePattern": "^_",
         "caughtErrorsIgnorePattern": "^_"
       }
-    ]
+    ],
+    "node/no-extraneous-import": "error",
+    "node/no-mixed-requires": "error",
+    "node/no-unpublished-import": "error"
+//    "node/no-unsupported-features": "error"
   }
 }

@@ -1,27 +1,30 @@
+@use '../../styles/mixins' as mixins;
+@use '../../styles/variables' as *;
+
 .login {
-	max-width: $maxPageWidth;
-	margin: 0 auto;
-
-}
-.login__container {
-	@include mixins.container(45px,45px);
-	max-width: $containerPageWidth;
-	margin: 0;
+  max-width: $maxPageWidth;
+  margin: 0 auto;
 }
 
-.login__title {
-	font-size: $titleFontSize;
+.container {
+  @include mixins.container(45px, 45px);
+  max-width: $containerPageWidth;
+  margin: 0;
 }
 
-.login__button {
-	margin-top: $defaultPadding;
-	align-self: flex-start;
+.title {
+  font-size: $titleFontSize;
 }
 
-.login__link {
-	opacity: 0.7;
-	align-self: flex-start;
-	color: inherit;
-	text-decoration: none;
-	border-bottom: 1px dashed $secondary;
+.submitButton {
+  margin-top: $defaultPadding;
+  align-self: flex-start;
+}
+
+.link {
+  opacity: 0.7;
+  align-self: flex-start;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dashed $secondary;
 }

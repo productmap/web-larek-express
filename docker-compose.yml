@@ -1,9 +1,12 @@
+name: web-larek-express
+
 services:
   frontend:
     build:
       context: frontend
-    env_file:
-      - frontend/.env
+    environment:
+      NODE_ENV: production
+      VITE_API_ORIGIN: http://localhost/api/v1
     volumes:
       - frontend:/app/frontend/dist
 
@@ -24,11 +27,15 @@ services:
       context: backend
     env_file:
       - backend/.env
+    environment:
+      NODE_ENV: production
+      APP_HOST: backend
+      DB_ADDRESS: mongodb://root:example@mongo:27017
     volumes:
       - ./backend/src:/app/src
-      - public:/app/src/public
+      - public:/app/dist/public
     ports:
-      - 3000:3000
+      - "3082:3082"
     networks:
       - internal
     depends_on:
@@ -38,12 +45,12 @@ services:
     build:
       context: nginx
     ports:
-      - 80:80
+      - "80:80"
     volumes:
       - frontend:/var/app
       - public:/var/public
     depends_on:
-      - frontend
+#      - frontend
       - backend
     networks:
       - internal

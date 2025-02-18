@@ -1,6 +1,10 @@
+@use '@styles/mixins' as mixins;
+@use '@styles/variables' as *;
+
 .gallery {
+  max-width: 100vw;
   @include mixins.container;
-  @include mixins.grid(600px, 24px);
+  @include mixins.grid(400px, 24px);
 
   &__item {
     border: none;
